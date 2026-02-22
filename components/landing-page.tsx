@@ -24,7 +24,6 @@ import {
   Check,
   X,
   Loader2,
-  Clock,
 } from "lucide-react";
 
 const LANGUAGES: Language[] = ["uz", "en", "ru"];
@@ -555,24 +554,6 @@ export function LandingPage() {
               </Card>
             </FadeIn>
           </div>
-        </div>
-      </section>
-
-      {/* ── Coming Soon Section ── */}
-      <section className="py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center">
-            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/5 px-5 py-2 text-sm font-medium text-brand">
-              <Clock className="size-4" />
-              {t.comingSoon.timeline}
-            </div>
-            <h2 className="mt-6 text-3xl font-bold sm:text-4xl">
-              {t.comingSoon.heading}
-            </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
-              {t.comingSoon.description}
-            </p>
-          </FadeIn>
         </div>
       </section>
 
