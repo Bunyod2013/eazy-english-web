@@ -10,7 +10,7 @@ type TranslationSet = {
   nav: {
     home: string;
     features: string;
-    waitlist: string;
+    start: string;
   };
   hero: {
     badge: string;
@@ -78,19 +78,9 @@ type TranslationSet = {
     q4: string;
     a4: string;
   };
-  subscribe: {
-    heading: string;
-    description: string;
-    placeholder: string;
-    cta: string;
-    privacy: string;
-    counter: string;
-    success: string;
-    alreadyExists: string;
-    invalidEmail: string;
-  };
   footer: {
     copyright: string;
+    privacy: string;
   };
 };
 
@@ -99,14 +89,14 @@ export const translations: Record<Language, TranslationSet> = {
     nav: {
       home: "Bosh sahifa",
       features: "Imkoniyatlar",
-      waitlist: "Kutish ro'yxati",
+      start: "Boshlash",
     },
     hero: {
       badge: "45M+ O'quvchilar",
       titleLine1: "Ingliz tilini",
       titleLine2: "maroqli o'rganing",
       subtitle: "Bepul. Qiziqarli. Samarali. Kuniga 15 daqiqa",
-      cta: "KUTISH RO'YXATIGA QO'SHILISH",
+      cta: "BOSHLASH",
       students: "O'quvchilar",
       appStore: "App Store",
       googlePlay: "Google Play",
@@ -166,25 +156,13 @@ export const translations: Record<Language, TranslationSet> = {
       a2: "Boshlang'ich darajadan tortib o'rta darajagacha. Noldan boshlovchilar uchun ham qulay.",
       q3: "Kuniga qancha vaqt kerak?",
       a3: "Kuniga atigi 15 daqiqa yetarli. Qisqa darslar bilan jadval bo'yicha o'rganasiz.",
-      q4: "Qachon chiqadi?",
-      a4: "2026-yil bahorida chiqishi rejalashtirilgan. Ro'yxatga yoziling — birinchi bo'lib bilasiz!",
-    },
-    subscribe: {
-      heading: "Birinchi bo'lib sinab ko'ring!",
-      description:
-        "EazyEnglish hali tayyor emas. Lekin siz birinchilardan bo'lib sinab ko'rish imkoniyatiga ega bo'lishingiz mumkin.",
-      placeholder: "Email manzilingiz",
-      cta: "Kutish ro'yxatiga qo'shilish",
-      privacy:
-        "Emailingiz hech qachon tarqatilmaydi va takroriy kiritish bloklanadi",
-      counter: "{count} kishi allaqachon ro'yxatdan o'tgan",
-      success: "Tabriklaymiz! Siz ro'yxatga qo'shildingiz!",
-      alreadyExists: "Bu email allaqachon ro'yxatda mavjud",
-      invalidEmail: "Iltimos, to'g'ri email kiriting",
+      q4: "Qanday boshlash mumkin?",
+      a4: "app.eazy-english.uz saytiga kirib, hoziroq boshlashingiz mumkin!",
     },
     footer: {
       copyright:
         "© 2025 EazyEnglish. Ingliz tilini o'rganishning eng qiziqarli usuli",
+      privacy: "Maxfiylik siyosati",
     },
   },
 
@@ -192,14 +170,14 @@ export const translations: Record<Language, TranslationSet> = {
     nav: {
       home: "Home",
       features: "Features",
-      waitlist: "Waitlist",
+      start: "Start",
     },
     hero: {
       badge: "45M+ Students",
       titleLine1: "Learn English",
       titleLine2: "through games",
       subtitle: "Free. Fun. Effective. 15 minutes a day",
-      cta: "JOIN THE WAITLIST",
+      cta: "START NOW",
       students: "Students",
       appStore: "App Store",
       googlePlay: "Google Play",
@@ -257,23 +235,12 @@ export const translations: Record<Language, TranslationSet> = {
       a2: "From beginner to intermediate. Perfect even for complete beginners.",
       q3: "How much time per day?",
       a3: "Just 15 minutes a day is enough. Short lessons that fit your schedule.",
-      q4: "When does it launch?",
-      a4: "Planned for spring 2026. Sign up to the waitlist — you'll be the first to know!",
-    },
-    subscribe: {
-      heading: "Be the first to try it!",
-      description:
-        "EazyEnglish isn't ready yet. But you can be among the first to try it out.",
-      placeholder: "Your email address",
-      cta: "Join the waitlist",
-      privacy: "Your email will never be shared and duplicate entries are blocked",
-      counter: "{count} people have already signed up",
-      success: "Congratulations! You've been added to the waitlist!",
-      alreadyExists: "This email is already on the waitlist",
-      invalidEmail: "Please enter a valid email",
+      q4: "How do I get started?",
+      a4: "Visit app.eazy-english.uz and start learning right away!",
     },
     footer: {
       copyright: "© 2025 EazyEnglish. The most fun way to learn English",
+      privacy: "Privacy Policy",
     },
   },
 
@@ -281,14 +248,14 @@ export const translations: Record<Language, TranslationSet> = {
     nav: {
       home: "Главная",
       features: "Возможности",
-      waitlist: "Лист ожидания",
+      start: "Начать",
     },
     hero: {
       badge: "45M+ Учеников",
       titleLine1: "Учите английский",
       titleLine2: "через игры",
       subtitle: "Бесплатно. Увлекательно. Эффективно. 15 минут в день",
-      cta: "ЗАПИСАТЬСЯ В ЛИСТ ОЖИДАНИЯ",
+      cta: "НАЧАТЬ",
       students: "Учеников",
       appStore: "App Store",
       googlePlay: "Google Play",
@@ -348,25 +315,13 @@ export const translations: Record<Language, TranslationSet> = {
       a2: "От начального до среднего. Подходит даже для полных новичков.",
       q3: "Сколько времени в день нужно?",
       a3: "Всего 15 минут в день достаточно. Короткие уроки, которые вписываются в ваш график.",
-      q4: "Когда запуск?",
-      a4: "Планируется на весну 2026. Запишитесь в лист ожидания — узнаете первыми!",
-    },
-    subscribe: {
-      heading: "Будьте первыми!",
-      description:
-        "EazyEnglish ещё не готов. Но вы можете быть среди первых, кто его попробует.",
-      placeholder: "Ваш email",
-      cta: "Записаться в лист ожидания",
-      privacy:
-        "Ваш email никогда не будет передан третьим лицам, повторная запись блокируется",
-      counter: "{count} человек уже записались",
-      success: "Поздравляем! Вы добавлены в лист ожидания!",
-      alreadyExists: "Этот email уже в листе ожидания",
-      invalidEmail: "Пожалуйста, введите корректный email",
+      q4: "Как начать?",
+      a4: "Зайдите на app.eazy-english.uz и начните учиться прямо сейчас!",
     },
     footer: {
       copyright:
         "© 2025 EazyEnglish. Самый увлекательный способ изучения английского",
+      privacy: "Политика конфиденциальности",
     },
   },
 };

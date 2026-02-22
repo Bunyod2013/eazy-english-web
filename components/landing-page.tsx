@@ -1,9 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, Component, type ReactNode } from "react";
-import { useMutation, useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useConvexReady } from "@/components/convex-provider";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import {
   translations,
   languageLabels,
@@ -17,7 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import {
   Zap,
@@ -25,8 +21,6 @@ import {
   Bot,
   Flame,
   Volume2,
-  Mail,
-  Lock,
   Check,
   X,
   Loader2,
@@ -125,160 +119,6 @@ function AnimatedProgress({
         )}
       />
     </div>
-  );
-}
-
-/* ────────────────────────────────────────────
-   Error boundary for Convex components
-   ──────────────────────────────────────────── */
-class ConvexErrorBoundary extends Component<
-  { fallback: ReactNode; children: ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: { fallback: ReactNode; children: ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-  render() {
-    if (this.state.hasError) return this.props.fallback;
-    return this.props.children;
-  }
-}
-
-/* ────────────────────────────────────────────
-   Waitlist form (Convex-backed)
-   ──────────────────────────────────────────── */
-function ConvexWaitlistFormInner({ t }: { t: TranslationSet }) {
-  const count = useQuery(api.waitlist.getCount);
-  const joinWaitlist = useMutation(api.waitlist.join);
-
-  return (
-    <WaitlistFormUI
-      t={t}
-      count={count ?? 0}
-      onSubmit={async (email) => {
-        const result = await joinWaitlist({ email });
-        return result.success
-          ? { ok: true as const }
-          : { ok: false as const, reason: "already_exists" as const };
-      }}
-    />
-  );
-}
-
-function ConvexWaitlistForm({ t }: { t: TranslationSet }) {
-  return (
-    <ConvexErrorBoundary fallback={<StaticWaitlistForm t={t} />}>
-      <ConvexWaitlistFormInner t={t} />
-    </ConvexErrorBoundary>
-  );
-}
-
-function StaticWaitlistForm({ t }: { t: TranslationSet }) {
-  return (
-    <WaitlistFormUI
-      t={t}
-      count={0}
-      onSubmit={async () => ({ ok: true as const })}
-    />
-  );
-}
-
-function WaitlistFormUI({
-  t,
-  count,
-  onSubmit,
-}: {
-  t: TranslationSet;
-  count: number;
-  onSubmit: (
-    email: string
-  ) => Promise<{ ok: true } | { ok: false; reason: string }>;
-}) {
-  const [email, setEmail] = useState("");
-  const [formState, setFormState] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
-  const [errorMsg, setErrorMsg] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = email.trim();
-    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setFormState("error");
-      setErrorMsg(t.subscribe.invalidEmail);
-      return;
-    }
-
-    setFormState("loading");
-    try {
-      const result = await onSubmit(trimmed);
-      if (result.ok) {
-        setFormState("success");
-        setEmail("");
-      } else {
-        setFormState("error");
-        setErrorMsg(t.subscribe.alreadyExists);
-      }
-    } catch {
-      setFormState("error");
-      setErrorMsg("Something went wrong. Please try again.");
-    }
-  };
-
-  return (
-    <>
-      {formState === "success" ? (
-        <div className="mx-auto flex max-w-md items-center justify-center gap-2 rounded-xl bg-green-50 p-4 text-brand animate-fade-in-up">
-          <Check className="size-5" />
-          <span className="font-medium">{t.subscribe.success}</span>
-        </div>
-      ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="mx-auto flex max-w-md flex-col gap-3 sm:flex-row"
-        >
-          <Input
-            type="email"
-            placeholder={t.subscribe.placeholder}
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              if (formState === "error") setFormState("idle");
-            }}
-            className="h-12 rounded-xl border-border bg-white transition-shadow duration-200 focus:shadow-md focus:shadow-brand/10"
-          />
-          <Button
-            type="submit"
-            disabled={formState === "loading"}
-            className="h-12 whitespace-nowrap rounded-xl bg-brand px-6 font-semibold text-white transition-all duration-300 hover:bg-brand-dark hover:shadow-lg hover:shadow-brand/25 disabled:opacity-70"
-          >
-            {formState === "loading" ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <Zap className="size-4" />
-            )}
-            {t.subscribe.cta}
-          </Button>
-        </form>
-      )}
-
-      {formState === "error" && errorMsg && (
-        <p className="text-sm text-red-500 animate-fade-in-up">{errorMsg}</p>
-      )}
-
-      <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-        <Lock className="size-4 shrink-0" />
-        <span>{t.subscribe.privacy}</span>
-      </div>
-
-      <p className="text-sm text-muted-foreground">
-        {t.subscribe.counter.replace("{count}", String(count))}
-      </p>
-    </>
   );
 }
 
@@ -481,7 +321,6 @@ function ExerciseCard({ t }: { t: TranslationSet }) {
    ──────────────────────────────────────────── */
 export function LandingPage() {
   const [lang, setLang] = useState<Language>("uz");
-  const convexReady = useConvexReady();
   const t = translations[lang];
 
   return (
@@ -510,10 +349,10 @@ export function LandingPage() {
               {t.nav.features}
             </a>
             <a
-              href="#subscribe"
+              href="https://app.eazy-english.uz"
               className="text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-brand"
             >
-              {t.nav.waitlist}
+              {t.nav.start}
             </a>
           </nav>
 
@@ -559,7 +398,7 @@ export function LandingPage() {
                   asChild
                   className="h-12 rounded-full bg-brand px-8 text-base font-semibold text-white transition-all duration-300 hover:bg-brand-dark hover:shadow-lg hover:shadow-brand/25 active:scale-[0.97]"
                 >
-                  <a href="#subscribe">
+                  <a href="https://app.eazy-english.uz">
                     <Zap className="size-5" />
                     {t.hero.cta}
                   </a>
@@ -737,47 +576,19 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Subscribe / Waitlist Section ── */}
-      <section id="subscribe" className="relative overflow-hidden py-16">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-20 top-1/4 h-40 w-40 rounded-full bg-muted/60" />
-          <div className="absolute -right-16 top-1/3 h-32 w-32 rounded-full bg-muted/40" />
-          <div className="absolute -left-10 bottom-1/4 h-24 w-24 rounded-full bg-muted/50" />
-          <div className="absolute -right-20 bottom-1/3 h-36 w-36 rounded-full bg-muted/30" />
-        </div>
-
-        <FadeIn className="relative mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
-          <Card className="border-0 bg-[#fafde8]/70 py-0 shadow-lg backdrop-blur-sm transition-shadow duration-300 hover:shadow-xl">
-            <CardContent className="space-y-6 p-8 text-center sm:p-12">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand/10">
-                <Mail className="size-8 text-brand" />
-              </div>
-
-              <h2 className="text-2xl font-bold sm:text-3xl">
-                {t.subscribe.heading}
-              </h2>
-
-              <p className="mx-auto max-w-md text-muted-foreground">
-                {t.subscribe.description}
-              </p>
-
-              {convexReady ? (
-                <ConvexWaitlistForm t={t} />
-              ) : (
-                <StaticWaitlistForm t={t} />
-              )}
-            </CardContent>
-          </Card>
-        </FadeIn>
-      </section>
-
       {/* ── Footer ── */}
-      <footer className="border-t py-8 justify-center items-center flex">
+      <footer className="border-t py-8">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-center text-sm text-muted-foreground">
               {t.footer.copyright}
             </p>
+            <a
+              href="https://app.eazy-english.uz/legal/privacy"
+              className="text-sm text-muted-foreground transition-colors duration-200 hover:text-brand"
+            >
+              {t.footer.privacy}
+            </a>
           </div>
         </div>
       </footer>
