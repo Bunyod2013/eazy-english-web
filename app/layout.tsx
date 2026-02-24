@@ -24,12 +24,20 @@ const siteUrl = "https://eazy-english.uz";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "EazyEnglish - Ingliz tilini o'yin orqali o'rganing | Learn English",
+    default: "EazyEnglish - Ingliz tilini o'yin orqali o'rganing | Eazy English UZ",
     template: "%s | EazyEnglish",
   },
   description:
-    "Ingliz tilini o'yin orqali o'rganing. Bepul. Qiziqarli. Samarali. Kuniga 15 daqiqa. Learn English through gamified lessons — free, fun, and effective.",
+    "EazyEnglish (Eazy English UZ) — Ingliz tilini o'yin orqali o'rganing. Bepul. Qiziqarli. Samarali. Kuniga 15 daqiqa. EasyEnglish UZ — learn English through gamified lessons, free, fun, and effective.",
   keywords: [
+    "eazyenglish",
+    "eazyenglishuz",
+    "eazy english",
+    "eazy english uz",
+    "easyenglish",
+    "easyenglishuz",
+    "easy english uz",
+    "easy english",
     "ingliz tili",
     "ingliz tili o'rganish",
     "learn english",

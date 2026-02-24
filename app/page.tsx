@@ -6,14 +6,16 @@ const jsonLd = {
     {
       "@type": "WebSite",
       name: "EazyEnglish",
+      alternateName: ["Eazy English", "EasyEnglish", "Easy English UZ", "EazyEnglish UZ"],
       url: "https://eazy-english.uz",
       description:
-        "Ingliz tilini o'yin orqali o'rganing. Bepul. Qiziqarli. Samarali.",
+        "EazyEnglish (Eazy English UZ) — Ingliz tilini o'yin orqali o'rganing. Bepul. Qiziqarli. Samarali.",
       inLanguage: ["uz", "en", "ru"],
     },
     {
       "@type": "SoftwareApplication",
       name: "EazyEnglish",
+      alternateName: ["Eazy English", "EasyEnglish", "Easy English UZ"],
       url: "https://app.eazy-english.uz",
       applicationCategory: "EducationalApplication",
       operatingSystem: "Web",
