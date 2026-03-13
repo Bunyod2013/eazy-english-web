@@ -30,6 +30,8 @@ type TranslationSet = {
     correct: string;
     incorrect: string;
     selectAnswer: string;
+    buildSentence: string;
+    tapWords: string;
   };
   mission: {
     heading: string;
@@ -109,6 +111,8 @@ export const translations: Record<Language, TranslationSet> = {
       correct: "To'g'ri!",
       incorrect: "Noto'g'ri!",
       selectAnswer: "Javobni tanlang",
+      buildSentence: "So'zlarni to'g'ri tartibda tuzing",
+      tapWords: "So'zlarni bosing...",
     },
     mission: {
       heading: "Nega biz buni qilyapmiz?",
@@ -190,6 +194,8 @@ export const translations: Record<Language, TranslationSet> = {
       correct: "Correct!",
       incorrect: "Incorrect!",
       selectAnswer: "Select an answer",
+      buildSentence: "Arrange the words to build a sentence",
+      tapWords: "Tap words to build...",
     },
     mission: {
       heading: "Why are we doing this?",
@@ -268,6 +274,8 @@ export const translations: Record<Language, TranslationSet> = {
       correct: "Правильно!",
       incorrect: "Неправильно!",
       selectAnswer: "Выберите ответ",
+      buildSentence: "Расставьте слова в правильном порядке",
+      tapWords: "Нажимайте слова...",
     },
     mission: {
       heading: "Почему мы это делаем?",

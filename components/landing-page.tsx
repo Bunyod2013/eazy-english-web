@@ -122,6 +122,228 @@ function AnimatedProgress({
 }
 
 /* ────────────────────────────────────────────
+   Exercise tabs (listening + sentence builder)
+   ──────────────────────────────────────────── */
+function ExerciseTabs({ t }: { t: TranslationSet }) {
+  const [tab, setTab] = useState<"listen" | "build">("build");
+  return (
+    <div className="w-full max-w-sm space-y-3">
+      <div className="flex rounded-xl bg-muted/50 p-1 gap-1">
+        <button
+          type="button"
+          onClick={() => setTab("build")}
+          className={cn(
+            "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200",
+            tab === "build"
+              ? "bg-white text-brand shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          {t.exercise.buildSentence.split(" ").slice(0, 2).join(" ")}
+        </button>
+        <button
+          type="button"
+          onClick={() => setTab("listen")}
+          className={cn(
+            "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200",
+            tab === "listen"
+              ? "bg-white text-brand shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          {t.exercise.listen}
+        </button>
+      </div>
+      {tab === "build" ? (
+        <SentenceBuilderCard t={t} />
+      ) : (
+        <ExerciseCard t={t} />
+      )}
+    </div>
+  );
+}
+
+/* ────────────────────────────────────────────
+   Sentence builder card
+   ──────────────────────────────────────────── */
+const SENTENCE = ["My", "name", "is", "Bunyod"];
+const EXTRA_WORDS = ["Hello", "I", "am"];
+const ALL_WORDS = [...SENTENCE, ...EXTRA_WORDS];
+
+function shuffle<T>(arr: T[]): T[] {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function SentenceBuilderCard({ t }: { t: TranslationSet }) {
+  const [selected, setSelected] = useState<string[]>([]);
+  const [available, setAvailable] = useState<string[]>(ALL_WORDS);
+  const [phase, setPhase] = useState<"idle" | "correct" | "incorrect">("idle");
+
+  useEffect(() => {
+    setAvailable(shuffle(ALL_WORDS));
+  }, []);
+
+  const addWord = (word: string, idx: number) => {
+    if (phase !== "idle") return;
+    setSelected((s) => [...s, word]);
+    setAvailable((a) => a.filter((_, i) => i !== idx));
+  };
+
+  const removeWord = (idx: number) => {
+    if (phase !== "idle") return;
+    const word = selected[idx];
+    setSelected((s) => s.filter((_, i) => i !== idx));
+    setAvailable((a) => [...a, word]);
+  };
+
+  const handleCheck = () => {
+    if (selected.length === 0 || phase !== "idle") return;
+    const isCorrect = selected.join(" ") === SENTENCE.join(" ");
+    setPhase(isCorrect ? "correct" : "incorrect");
+    setTimeout(() => {
+      setPhase("idle");
+      setSelected([]);
+      setAvailable(shuffle(ALL_WORDS));
+    }, 2000);
+  };
+
+  const handleReset = () => {
+    if (phase !== "idle") return;
+    setSelected([]);
+    setAvailable(shuffle(ALL_WORDS));
+  };
+
+  return (
+    <Card className="w-full max-w-sm border-0 py-0 shadow-xl shadow-brand/10 transition-shadow duration-500 hover:shadow-2xl hover:shadow-brand/20">
+      <CardContent className="space-y-5 p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <span className="font-semibold">{t.exercise.level}</span>
+          <span className="text-sm text-muted-foreground">8/20</span>
+        </div>
+
+        {/* Instruction */}
+        <p className="text-sm font-medium text-muted-foreground">
+          {t.exercise.buildSentence}
+        </p>
+
+        {/* Answer area */}
+        <div
+          className={cn(
+            "min-h-[52px] rounded-xl border-2 border-dashed p-3 flex flex-wrap gap-2 transition-colors duration-300",
+            phase === "correct"
+              ? "border-brand bg-brand/5"
+              : phase === "incorrect"
+                ? "border-red-400 bg-red-50"
+                : selected.length > 0
+                  ? "border-brand/40"
+                  : "border-muted"
+          )}
+        >
+          {selected.length === 0 ? (
+            <span className="text-xs text-muted-foreground self-center">
+              {t.exercise.tapWords}
+            </span>
+          ) : (
+            selected.map((word, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => removeWord(i)}
+                disabled={phase !== "idle"}
+                className={cn(
+                  "rounded-lg px-3 py-1.5 text-sm font-medium border-2 transition-all duration-200 active:scale-[0.97]",
+                  phase === "correct"
+                    ? "border-brand bg-brand/10 text-brand"
+                    : phase === "incorrect"
+                      ? "border-red-400 bg-red-50 text-red-600"
+                      : "border-brand/30 bg-brand/5 text-brand hover:bg-red-50 hover:border-red-300 hover:text-red-500"
+                )}
+              >
+                {word}
+              </button>
+            ))
+          )}
+        </div>
+
+        {/* Word tiles */}
+        <div className="flex flex-wrap gap-2">
+          {available.map((word, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => addWord(word, i)}
+              disabled={phase !== "idle"}
+              className={cn(
+                "rounded-xl border-2 px-3 py-1.5 text-sm font-medium transition-all duration-200 active:scale-[0.97]",
+                "border-muted hover:border-brand/40 hover:bg-brand/5 hover:shadow-sm",
+                phase !== "idle" && "pointer-events-none opacity-50"
+              )}
+            >
+              {word}
+            </button>
+          ))}
+        </div>
+
+        {/* Result message */}
+        {(phase === "correct" || phase === "incorrect") && (
+          <div
+            className={cn(
+              "flex items-center justify-center gap-2 rounded-lg p-2 text-sm font-semibold animate-fade-in-up",
+              phase === "correct"
+                ? "bg-green-50 text-brand"
+                : "bg-red-50 text-red-500"
+            )}
+          >
+            {phase === "correct" ? (
+              <Check className="size-4" />
+            ) : (
+              <X className="size-4" />
+            )}
+            {phase === "correct" ? t.exercise.correct : t.exercise.incorrect}
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="flex items-center justify-between pt-2">
+          <button
+            type="button"
+            onClick={handleReset}
+            disabled={phase !== "idle"}
+            className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground disabled:opacity-40"
+          >
+            {t.exercise.skip}
+          </button>
+          <Button
+            onClick={handleCheck}
+            disabled={selected.length === 0 || phase !== "idle"}
+            className={cn(
+              "rounded-xl px-8 font-semibold text-white transition-all duration-300",
+              phase === "correct"
+                ? "bg-brand"
+                : phase === "incorrect"
+                  ? "bg-red-500"
+                  : "bg-brand hover:bg-brand-dark hover:shadow-md hover:shadow-brand/20 active:scale-[0.97]"
+            )}
+          >
+            {phase === "correct" ? (
+              <Check className="size-4" />
+            ) : phase === "incorrect" ? (
+              <X className="size-4" />
+            ) : null}
+            {phase === "correct"
+              ? t.exercise.correct
+              : phase === "incorrect"
+                ? t.exercise.incorrect
+                : t.exercise.check}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+/* ────────────────────────────────────────────
    Interactive exercise card
    ──────────────────────────────────────────── */
 function ExerciseCard({ t }: { t: TranslationSet }) {
@@ -405,9 +627,9 @@ export function LandingPage() {
               </FadeIn>
             </div>
 
-            {/* Exercise Card */}
-            <FadeIn delay={300} className="flex justify-center lg:justify-end">
-              <ExerciseCard t={t} />
+            {/* Exercise Cards */}
+            <FadeIn delay={300} className="flex flex-col items-center gap-4 lg:items-end">
+              <ExerciseTabs t={t} />
             </FadeIn>
           </div>
         </div>
